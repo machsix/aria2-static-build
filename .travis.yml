@@ -1,0 +1,25 @@
+language: cpp
+sudo: required
+dist: xenial
+compiler:
+  - gcc
+env:
+  - BUILD_ARCH='armv7-eabihf'
+before_install:
+  - sudo apt-get update
+  - sudo bash install-libs.sh
+script:
+  - export ARIA2_ver="1.35.0"
+  - find . -name "*.sh" -exec chmod +x '{}' \;
+  - find . -name "*.sh" -exec dos2unix '{}' \;
+  - bash build.sh
+  - git tag v${ARIA2_ver}
+deploy:
+  provider: releases
+  api_key: "$GH_TOKEN"
+  file_glob: true
+  file:
+    - aria2*.tar.gz
+  skip_cleanup: true
+  on:
+    branch: master

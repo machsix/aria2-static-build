@@ -1,0 +1,9 @@
+[Unit]
+Description=Aria2 Service
+After=network.target
+
+[Service]
+ExecStart=${LOCAL_DIR}/aria2c --conf-path=/etc/aria2/aria2.conf
+
+[Install]
+WantedBy=default.target
