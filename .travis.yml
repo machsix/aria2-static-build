@@ -19,7 +19,7 @@ before_deploy:
   - git config --local user.name "machsix"
   - git config --local user.email "28209092+machsix@users.noreply.github.com"
   - git tag -d v${ARIA2_ver} || true
-  - git tag v${ARIA2_ver}
+  - git tag v${ARIA2_ver} -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
@@ -30,3 +30,7 @@ deploy:
   skip_cleanup: true
   on:
     branch: master
+    tag: false
+branches:
+  except:
+    - /^v[\d\.]*$/
