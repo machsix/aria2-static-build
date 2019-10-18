@@ -38,8 +38,8 @@ build_zlib () {
   cd $BUILD_DIRECTORY
   FOLDER=$(downloader $ZLIB)
   cd $FOLDER
-  ./configure --prefix=$PREFIX | tee conf.log
-  $MAKE | tee make.log
+  ./configure --prefix=$PREFIX
+  $MAKE > /dev/null
   make install
 }
 
@@ -50,8 +50,9 @@ build_libxml () {
   ./configure --host=$TARGET_HOST \
               --prefix=$PREFIX \
               --enable-static=yes \
-              --enable-shared=no
-  $MAKE
+              --enable-shared=no \
+              --without-python
+  $MAKE > /dev/null
   make install
 }
 
@@ -63,7 +64,7 @@ build_expat () {
               --prefix=$PREFIX \
               --enable-static=yes \
               --enable-shared=no
-  $MAKE
+  $MAKE > /dev/null
   make install
 }
 build_expat () {
@@ -74,7 +75,7 @@ build_expat () {
               --prefix=$PREFIX \
               --enable-static=yes \
               --enable-shared=no
-  $MAKE
+  $MAKE > /dev/null
   make install
 }
 
@@ -86,7 +87,7 @@ build_cares () {
               --prefix=$PREFIX \
               --enable-static \
               --disable-shared
-  $MAKE
+  $MAKE > /dev/null
   make install
 }
 
@@ -98,8 +99,8 @@ build_openssl () {
              --prefix=$PREFIX shared zlib zlib-dynamic \
              --with-zlib-lib=$PREFIX/lib \
              --with-zlib-include=$PREFIX/include
-  $MAKE CC=$CC
-  $MAKE CC=$CC install | tee log.txt
+  $MAKE CC=$CC > /dev/null
+  $MAKE CC=$CC install
 }
 
 build_sqlite () {
@@ -109,7 +110,7 @@ build_sqlite () {
   ./configure --host=$TARGET_HOST \
               --prefix=$PREFIX \
               --enable-static --enable-shared
-  $MAKE CC=$CC
+  $MAKE CC=$CC > /dev/null
   make install CC=$CC
 }
 
@@ -124,8 +125,8 @@ build_libssh () {
               --prefix=$PREFIX \
               --enable-static --disable-shared \
               --with-libssl-prefix=$PREFIX
-  $MAKE LIBS="-lz -lssl -lcrypto" CC=$CC
-  make install CC=$CC | tee log.txt
+  $MAKE LIBS="-lz -lssl -lcrypto" CC=$CC > /dev/null
+  make install CC=$CC
 }
 set +e
 build_zlib

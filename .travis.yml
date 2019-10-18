@@ -4,20 +4,27 @@ dist: xenial
 compiler:
   - gcc
 env:
-  - BUILD_ARCH='armv7-eabihf'
+  global:
+    - ARIA2_ver="1.35.0"
+  jobs:
+    - BUILD_ARCH='armv7-eabihf'
 before_install:
   - sudo apt-get update
   - sudo bash install-libs.sh
 script:
-  - export ARIA2_ver="1.35.0"
   - find . -name "*.sh" -exec chmod +x '{}' \;
   - find . -name "*.sh" -exec dos2unix '{}' \;
   - bash build.sh
+before_deploy:
+  - git config --local user.name "machsix"
+  - git config --local user.email "28209092+machsix@users.noreply.github.com"
+  - git tag -d v${ARIA2_ver} || true
   - git tag v${ARIA2_ver}
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
   file_glob: true
+  overwrite: true
   file:
     - aria2*.tar.gz
   skip_cleanup: true
